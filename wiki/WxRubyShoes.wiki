@@ -25,4 +25,13 @@ becomes:
 button(:parent => parent, :id => id) 
 }}}
 
-Download it, look at the simple example.  It's pretty self-explanatory.
+This example may not look like much, but it is the ability to nest constructors in blocks, and have the library keep track of context for you, that makes it so concise.
+
+Download it, look at the simple example.  It's pretty self-explanatory.  Except for the bit where the frame controller module is passed to the frame method - that bit deserves your close attention.
+
+= Known Issues =
+
+Currently we are at the first cut stage.  Only those controls I am actually using in the example are coded (I have finished all the layouts, though).  Nesting layouts works, but right now I am only using the library for single form applications.  I really haven't thought of the next step, and probably won't until I want to use it.  Suggestions are welcome.
+
+You will notice from the example that I have not done anything nice to wrap up the standard dialogs.  I'll get there.
+
