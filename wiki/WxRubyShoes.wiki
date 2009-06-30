@@ -8,4 +8,21 @@ OTOH, I love Shoes, but hate that it has to run in it's own interpreter.
 
 WxRubyShoes is the bastard child of both worlds.  It wraps up the wxRuby library in a syntax that is extremely Shoesish.
 
+= Thank You =
+
 A big call-out to [http://whytheluckystiff.net/ Why the lucky stiff], who I have never met but always respected as the demented genius he obviously is.  I have shamelessly stolen a piece of magic from one of his posts - the cloaker method.  I hope he doesn't mind.
+
+= Details =
+
+I have tried to keep all the method and parameter names the same as their counterparts in the wxRuby library, so the [http://wxruby.rubyforge.org/doc/ standard documentation for wxRuby] will stand you in good stead.
+
+Class constructors are lowercase and underscored, instead of camel-capitalized.  All method parameters are passed as a single hash.  This is a little more verbose, but I like it's self-documenting nature, and you only have to put in the arguments you want - everything else has sensible defaults.  For example:
+{{{ 
+Wx::Button.new(parent, id) 
+}}}
+becomes:
+{{{ 
+button(:parent => parent, :id => id) 
+}}}
+
+Download it, look at the simple example.  It's pretty self-explanatory.
