@@ -1,0 +1,11 @@
+#summary Shoes-style wrapper around wxRuby2
+
+= Introduction =
+
+I belatedly discovered wxRuby, and was blown away (pleasantly) by its look, power and flexibility, and (unpleasantly) by it's very non-rubyish syntax.
+
+OTOH, I love Shoes, but hate that it has to run in it's own interpreter.
+
+WxRubyShoes is the bastard child of both worlds.  It wraps up the wxRuby library in a syntax that is extremely Shoesish.
+
+A big call-out to Why, who I have never met but always respected as the demented genius he obviously is.  I have shamelessly stolen a piece of magic from one of his posts - the cloaker method.  I hope he doesn't mind.
