@@ -1,13 +1,14 @@
 require 'wx_ruby_shoes'
+include Wx
 
 module MyFrameController
 	def verify(event)
-		self.cursor = Wx::HOURGLASS_CURSOR
+		self.cursor = HOURGLASS_CURSOR
 		begin
 			# Set up the Excel output file
 			@status.push_status_text "Sorry, I've ripped the guts out.  It's only an example..."
 		ensure
-			self.cursor = Wx::STANDARD_CURSOR
+			self.cursor = STANDARD_CURSOR
 		end
 	end
 	
@@ -22,25 +23,25 @@ module MyFrameController
 	end
 	
 	def open_file3(event)
-		result, filename = open_file('Save to an Excel file:', '*.xls', Wx::FD_SAVE)
+		result, filename = open_file('Save to an Excel file:', '*.xls', FD_SAVE)
 		@txtFile3.value = filename if result
 	end
 	
-	def open_file(caption, wildcard, style = Wx::FD_OPEN)
+	def open_file(caption, wildcard, style = FD_OPEN)
 		fd = Wx::FileDialog.new(self, caption, '', '', wildcard, style)
-		result = (fd.show_modal == Wx::ID_OK)
+		result = (fd.show_modal == ID_OK)
 		[result, "#{fd.directory}\\#{fd.filename}"]
 	end
 end
 
 WxShoes.App do 
-	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Wx::Size.new(600, 180) do
-		set_min_size Wx::Size.new(300, 180)
+	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 180) do
+		set_min_size Size.new(300, 180)
 		panel do
 			vbox_sizer do
 				flex_grid_sizer :cols => 3, :rows => 4 do
 					@sizers.last.add_growable_col(1)
-					btn_size = Wx::Size.new(25, 25)
+					btn_size = Size.new(25, 25)
 					
 					static_text :label => 'First file:'
 					@txtFile1 = text_ctrl(:value => 'file1.rb')
@@ -55,7 +56,7 @@ WxShoes.App do
 					button(:label => '...', :size => btn_size) { |event| open_file3(event) }
 				end	
 				vbox_sizer do
-					button(:label => 'Do something', :flag => Wx::ALIGN_RIGHT|Wx::ALL) { |event| verify(event) }
+					button(:label => 'Do something', :flag => ALIGN_RIGHT|ALL) { |event| verify(event) }
 				end
 			end
 		end
