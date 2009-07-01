@@ -28,6 +28,109 @@ module WxShoesControls
 		my_status_bar
 	end
 	
+	# CollapsiblePane		A container with a button to collapse or expand contents
+	def collapsible_pane(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        label = params[:label] || ''
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || Wx::CP_DEFAULT_STYLE
+        validator = params[:validator] || Wx::DEFAULT_VALIDATOR
+		my_collapsible_pane = Wx::CollapsiblePane.new(parent, id, label, pos, size, style, validator)
+		push_container(my_collapsible_pane) { yield }
+	end
+	
+	# ScrolledWindow		Window with automatically managed scrollbars
+	def scrolled_window(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || (Wx::VSCROLL | Wx::HSCROLL)
+		my_scrolled_window = Wx::ScrolledWindow.new(parent, id, pos, size, style) 
+		push_container(my_scrolled_window) { yield }
+	end
+	
+	# Grid					A grid (table) window
+	def grid(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || Wx::WANTS_CHARS
+		my_grid = Wx::Grid.new(parent, id, pos, size, style)
+		push_container(my_grid) { yield }
+	end
+	
+	# SplitterWindow		Window which can be split vertically or horizontally
+	def splitter_window(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || Wx::SP_3D
+		my_splitter_window = Wx::SplitterWindow.new(parent, id, pos, size, style)
+		push_container(my_grid) { yield }
+	end
+	
+	##ToolBar				Toolbar with buttons - will not implement here.  Use Frame#create_tool_bar instead.
+	
+	# Notebook				Tabbed Notebook for layout out controls
+	def notebook(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || 0
+		my_notebook = Wx::Notebook.new(parent, id, pos, size, style)
+		push_container(my_notebook) { yield }
+	end
+	
+	# Listbook				Similar to notebook but using a list control
+	def listbook(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || 0
+		my_listbook = Wx::Listbook.new(parent, id, pos, size, style)
+		push_container(my_listbook) { yield }
+	end
+	
+	# Choicebook			Similar to notebook but using a choice (dropdown) control
+	def choicebook(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || 0
+		my_choicebook = Wx::Choicebook.new(parent, id, pos, size, style)
+		push_container(my_choicebook) { yield }
+	end
+	
+	# SashWindow			Window with four optional sashes that can be dragged
+	def sash_window(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || (Wx::CLIP_CHILDREN | Wx::SW_3D)
+		my_sash_window = Wx::SashWindow.new(parent, id, pos, size, style)
+		push_container(my_sash_window) { yield }
+	end
+	
+	##SashLayoutWindow		Window that can be involved in an IDE-like layout arrangement
+	def sash_window_layout(params = {})
+		parent = params[:parent] || @containers.last
+		id = params[:id] || -1
+        pos = params[:pos] || Wx::DEFAULT_POSITION
+        size = params[:size] || Wx::DEFAULT_SIZE
+        style = params[:style] || (Wx::CLIP_CHILDREN | Wx::SW_3D)
+		my_sash_layout_window = Wx::SashLayoutWindow.new(parent, id, pos, size, style)
+		push_container(my_sash_layout_window) { yield }
+	end
+	
 	def push_container(container)
 		@containers.push(container)
 		yield
@@ -35,16 +138,6 @@ module WxShoesControls
 		container
 	end
 	# TODO in this section:
-	##CollapsiblePane		A container with a button to collapse or expand contents
-	##ScrolledWindow		Window with automatically managed scrollbars
-	##Grid					A grid (table) window
-	##SplitterWindow		Window which can be split vertically or horizontally
-	##ToolBar				Toolbar with buttons
-	##Notebook				Tabbed Notebook for layout out controls
-	##Listbook				Similar to notebook but using a list control
-	##Choicebook			Similar to notebook but using a choice (dropdown) control
-	##SashWindow			Window with four optional sashes that can be dragged
-	##SashLayoutWindow		Window that can be involved in an IDE-like layout arrangement
 	##VScrolledWindow		As ScrolledWindow but supports lines of variable height
 	##WizardPage			A base class for a page in wizard dialog.
 	##WizardPageSimple		A page in wizard dialog.
