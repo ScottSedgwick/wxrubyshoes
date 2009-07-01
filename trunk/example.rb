@@ -37,6 +37,16 @@ end
 WxShoes.App do 
 	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 180) do
 		set_min_size Size.new(300, 180)
+		menu_bar do
+			menu :title => '&File' do
+				menu_item :text => 'Hello'
+				menu_item :text => 'Goodbye'
+			end
+			menu :title => '&Edit' do
+				menu_item :text => 'Bonjour'
+				menu_item :text => 'Au Revoir'
+			end
+		end
 		panel do
 			vbox_sizer do
 				flex_grid_sizer :cols => 3, :rows => 4 do
