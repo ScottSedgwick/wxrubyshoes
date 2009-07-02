@@ -35,16 +35,18 @@ module MyFrameController
 end
 
 WxShoes.App do 
-	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 180) do
-		set_min_size Size.new(300, 180)
+	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 205) do
+		set_min_size Size.new(300, 205)
 		menu_bar do
 			menu :title => '&File' do
-				menu_item :text => 'Hello'
-				menu_item :text => 'Goodbye'
+				menu_item(:text => 'Hello') { puts "Hello" }
+				menu_separator
+				menu_item(:text => 'Goodbye') { puts "Goodbye" }
 			end
 			menu :title => '&Edit' do
-				menu_item :text => 'Bonjour'
-				menu_item :text => 'Au Revoir'
+				menu_item(:text => 'Bonjour') { puts "Bonjour" }
+				menu_separator
+				menu_item(:text => 'Au Revoir') { puts "Au Revoir" }
 			end
 		end
 		panel do
