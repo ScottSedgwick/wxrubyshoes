@@ -506,12 +506,8 @@ module WxShoesControls
 	def menu(params = {})
 		title = params[:title] || ''
 		style = params[:style] || 0
-		my_menu = Wx::Menu.new(title, style)
-		if @containers.last.instance_of?(Wx::MenuBar)
-			@containers.last.append(my_menu, title)
-		elsif @containers.last.instance_of?(Wx::MenuItem)
-			@containers.last.set_sub_menu(my_menu)
-		end
+		my_menu = Wx::Menu.new('', style)
+		@containers.last.append(my_menu, title)
 		push_container(my_menu) { yield } if block_given?
 	end
 	
@@ -519,13 +515,13 @@ module WxShoesControls
 	def menu_bar(params = {})
 		style = params[:style] || 0
 		my_menu_bar = Wx::MenuBar.new(style)
-		@containers.last.set_menu_bar(my_menu_bar)
+		@containers.first.set_menu_bar(my_menu_bar)
 		push_container(my_menu_bar) { yield } if block_given?
 	end
 	
 	# MenuItem		Represents a single menu item
 	def menu_item(params = {})
-		id = params[:id] || Wx::ID_SEPARATOR
+		id = params[:id] || -1
 		text = params[:text] || ''
 		helpString = params[:helpString] || ''
 		kind = params[:kind] || Wx::ITEM_NORMAL
@@ -535,7 +531,13 @@ module WxShoesControls
 		elsif @containers.last.instance_of?(Wx::Menu)
 			@containers.last.append_item(my_menu_item)
 		end
-		push_container(my_menu_item) { yield } if block_given?
+		@containers.first.evt_menu(my_menu_item) { yield } if block_given?
+	end
+	
+	def menu_separator(params = {})
+		params[:id] = Wx::ID_SEPARATOR
+		params[:kind] = Wx::ITEM_SEPARATOR
+		menu_item(params)
 	end
 
 #########################################################################################################
@@ -604,6 +606,7 @@ class WxShoesApp < Wx::App
 	
 	def frame(params, &block)
 		@frame = WxShoesFrame.new(params, &block)
+		@frame.icon = params[:icon] if params[:icon]
 		@frame.show
 	end
 	
