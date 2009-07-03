@@ -1,4 +1,4 @@
-require 'wx_ruby_shoes'
+require 'wxrubyshoes'
 include Wx
 
 module MyFrameController
@@ -35,7 +35,7 @@ module MyFrameController
 end
 
 WxShoes.App do 
-	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 205) do
+	frame :title => 'wxRubyShoes example', :controller => MyFrameController, :size => Size.new(600, 500) do
 		set_min_size Size.new(300, 205)
 		menu_bar do
 			menu :title => '&File' do
@@ -49,28 +49,31 @@ WxShoes.App do
 				menu_item(:text => 'Au Revoir') { puts "Au Revoir" }
 			end
 		end
-		panel do
-			vbox_sizer do
-				flex_grid_sizer :cols => 3, :rows => 4 do
-					@sizers.last.add_growable_col(1)
-					btn_size = Size.new(25, 25)
-					
-					static_text :label => 'First file:'
-					@txtFile1 = text_ctrl(:value => 'file1.rb')
-					button(:label => '...', :size => btn_size) { |event| open_file1(event) }
-					
-					static_text :label => 'Second file:'
-					@txtFile2 = text_ctrl(:value => 'file2.xml')
-					button(:label => '...', :size => btn_size) { |event| open_file2(event) }
-					
-					static_text :label => 'Third file:'
-					@txtFile3 = text_ctrl(:value => 'file3.xls')
-					button(:label => '...', :size => btn_size) { |event| open_file3(event) }
-				end	
+		notebook do
+			panel(:title => 'Page 1') do
 				vbox_sizer do
-					button(:label => 'Do something', :flag => ALIGN_RIGHT|ALL) { |event| verify(event) }
+					flex_grid_sizer :cols => 3, :rows => 4 do
+						@sizers.last.add_growable_col(1)
+						btn_size = Size.new(25, 25)
+						
+						static_text :label => 'First file:'
+						@txtFile1 = text_ctrl(:value => 'file1.rb')
+						button(:label => '...', :size => btn_size) { |event| open_file1(event) }
+						
+						static_text :label => 'Second file:'
+						@txtFile2 = text_ctrl(:value => 'file2.xml')
+						button(:label => '...', :size => btn_size) { |event| open_file2(event) }
+						
+						static_text :label => 'Third file:'
+						@txtFile3 = text_ctrl(:value => 'file3.xls')
+						button(:label => '...', :size => btn_size) { |event| open_file3(event) }
+					end	
+					vbox_sizer do
+						button(:label => 'Do something', :flag => ALIGN_RIGHT|ALL) { |event| verify(event) }
+					end
 				end
 			end
+			panel(:title => 'Page2', :selected => true)
 		end
 		@status = status_bar(:text => 'Idle')
 	end
