@@ -50,7 +50,7 @@ WxShoes.App do
 			end
 		end
 		notebook do
-			panel(:title => 'Page 1') do
+			panel(:title => 'Panel 1') do
 				vbox_sizer do
 					flex_grid_sizer :cols => 3, :rows => 4 do
 						@sizers.last.add_growable_col(1)
@@ -73,7 +73,17 @@ WxShoes.App do
 					end
 				end
 			end
-			panel(:title => 'Page2', :selected => true)
+			listbook(:title => 'Listbox 1', :selected => true) do
+				choicebook(:title => 'Choicebook 1') do
+					panel(:title => 'Panel 3') do
+						vbox_sizer do
+							static_text(:label => 'Panel 3')
+						end
+					end
+					grid(:title => 'Grid 1', :numRows => 3, :numCols => 4, :selected => true)
+				end
+				panel(:title => 'Panel 2')
+			end
 		end
 		@status = status_bar(:text => 'Idle')
 	end

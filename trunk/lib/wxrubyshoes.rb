@@ -5,7 +5,7 @@ module WxShoesControls
 #########################################################################################################
 # Miscellaneous Windows
 #########################################################################################################
-	# TODO: Choicebook			Similar to notebook but using a choice (dropdown) control
+	# Choicebook			Similar to notebook but using a choice (dropdown) control
 	def choicebook(params = {})
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_choicebook = Wx::Choicebook.new(parent, id, pos, size, style)
@@ -14,8 +14,9 @@ module WxShoesControls
 	end
 	
 	# TODO: CollapsiblePane		A container with a button to collapse or expand contents
+	# Displays, but I can't figure out how it is supposed to work.
 	def collapsible_pane(params = {})
-		parent, id, pos, size, style = read_default_params(params, Wx::CP_DEFAULT_STYLE)
+		parent, id, pos, size, style = read_default_params(params, 0) #Wx::CP_DEFAULT_STYLE)
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
 		my_collapsible_pane = Wx::CollapsiblePane.new(parent, id, label, pos, size, style, validator)
 		add_to_parent(my_collapsible_pane, parent, params)
@@ -23,14 +24,26 @@ module WxShoesControls
 	end
 	
 	# TODO: Grid					A grid (table) window
+	# Displays and works, but ruby exits strangely if I edit anything.
 	def grid(params = {})
 		parent, id, pos, size, style = read_default_params(params, Wx::WANTS_CHARS)
 		my_grid = Wx::Grid.new(parent, id, pos, size, style)
+		
+		selmode = params[:selmode] || Wx::Grid::GridSelectCells
+		numRows = params[:numRows]
+		numCols = params[:numCols]
+		table = params[:table]
+		if table
+			my_grid.set_table(table, selmode)
+		elsif numRows && numCols
+			my_grid.create_grid(numRows, numCols, selmode)
+		end		
+		
 		add_to_parent(my_grid, parent, params)
 		push_container(my_grid) { yield } if block_given?
 	end
 	
-	# TODO: Listbook				Similar to notebook but using a list control
+	# Listbook				Similar to notebook but using a list control
 	def listbook(params = {})
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_listbook = Wx::Listbook.new(parent, id, pos, size, style)
