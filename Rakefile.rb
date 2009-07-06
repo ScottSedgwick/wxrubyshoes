@@ -17,3 +17,8 @@ end
 Rake::GemPackageTask.new(spec) do |pkg| 
 	pkg.need_tar = true 
 end 
+
+desc 'Run the example app'
+task :example do
+	sh 'ruby -Ilib examples/example01.rb'
+end
