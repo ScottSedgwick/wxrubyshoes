@@ -227,11 +227,13 @@ module WxShoesControls
 	
 	def add_to_sizer(control, params = {})
 		sizer = params[:sizer] || @sizers.last
-		proportion = params[:proportion] || 0
-		flag = params[:flag] || (Wx::GROW|Wx::ALL)
-		border = params[:border] || 2 
-		userData = params[:userData]
-		sizer.add(control, proportion, flag, border, userData)
+		if sizer
+			proportion = params[:proportion] || 0
+			flag = params[:flag] || (Wx::GROW|Wx::ALL)
+			border = params[:border] || 2 
+			userData = params[:userData]
+			sizer.add(control, proportion, flag, border, userData)
+		end
 		control
 	end
 	
@@ -323,12 +325,13 @@ module WxShoesControls
 		add_to_sizer(my_choice, params)
 	end
 	
-	# TODO: ComboBox		A drop-down Choice with an editable text area
+	# ComboBox		A drop-down Choice with an editable text area
 	def combo_box(params = {})
 		parent, id, pos, size, style = read_default_params(params, 0)
+		value = params[:value] || ''
 		choices = params[:choices] || []
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
-		my_combo_box = Wx::ComboBox.new(parent, id, pos, size, choices, style, validator) 
+		my_combo_box = Wx::ComboBox.new(parent, id, value, pos, size, choices, style, validator) 
 		add_to_sizer(my_combo_box, params)
 	end
 	
@@ -404,15 +407,16 @@ module WxShoesControls
 		add_to_sizer(my_media_ctrl, params)
 	end
 	
-	# TODO: RadioBox		A group of radio buttons
+	# RadioBox		A group of radio buttons
 	def radio_box(params = {})
 		parent, id, pos, size, style = read_default_params(params, Wx::RA_SPECIFY_COLS)
 		label = params[:label] 
 		n = params[:n] || 0 
 		choices = params[:choices]
-		majorDimension = params[:majorDimension] || 0 
+		major_dimension = params[:major_dimension] || 0 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
-		my_radio_box = Wx::RadioBox.new(parent, id, label, pos, size, n, choices, majorDimension, style, validator) 
+		my_radio_box = Wx::RadioBox.new(parent, id, label, pos, size, choices, major_dimension, style, validator) 
+		evt_radiobox(my_radio_box.get_id()) {|event| yield(event)} if block_given?
 		add_to_sizer(my_radio_box, params)
 	end
 	
