@@ -5,17 +5,15 @@ module WxShoesControls
 #########################################################################################################
 # Miscellaneous Windows
 #########################################################################################################
-	# Choicebook			Similar to notebook but using a choice (dropdown) control
-	def choicebook(params = {})
+	def choicebook(params = {})			# Choicebook			Similar to notebook but using a choice (dropdown) control
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_choicebook = Wx::Choicebook.new(parent, id, pos, size, style)
 		add_to_parent(my_choicebook, parent, params)
 		push_container(my_choicebook) { yield } if block_given?
 	end
 	
-	# TODO: CollapsiblePane		A container with a button to collapse or expand contents
+	def collapsible_pane(params = {})	# TODO: CollapsiblePane		A container with a button to collapse or expand contents
 	# Displays, but I can't figure out how it is supposed to work.
-	def collapsible_pane(params = {})
 		parent, id, pos, size, style = read_default_params(params, 0) #Wx::CP_DEFAULT_STYLE)
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
 		my_collapsible_pane = Wx::CollapsiblePane.new(parent, id, label, pos, size, style, validator)
@@ -23,9 +21,8 @@ module WxShoesControls
 		push_container(my_collapsible_pane) { yield } if block_given?
 	end
 	
-	# TODO: Grid					A grid (table) window
+	def grid(params = {})				# TODO: Grid					A grid (table) window
 	# Displays and works, but ruby exits strangely if I edit anything.
-	def grid(params = {})
 		parent, id, pos, size, style = read_default_params(params, Wx::WANTS_CHARS)
 		my_grid = Wx::Grid.new(parent, id, pos, size, style)
 		
@@ -43,64 +40,56 @@ module WxShoesControls
 		push_container(my_grid) { yield } if block_given?
 	end
 	
-	# Listbook				Similar to notebook but using a list control
-	def listbook(params = {})
+	def listbook(params = {})			# Listbook				Similar to notebook but using a list control
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_listbook = Wx::Listbook.new(parent, id, pos, size, style)
 		add_to_parent(my_listbook, parent, params)
 		push_container(my_listbook) { yield } if block_given?
 	end
 	
-	# Notebook				Tabbed Notebook for layout out controls
-	def notebook(params = {})
+	def notebook(params = {})			# Notebook				Tabbed Notebook for layout out controls
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_notebook = Wx::Notebook.new(parent, id, pos, size, style)
 		add_to_parent(my_notebook, parent, params)
 		push_container(my_notebook) { yield } if block_given?
 	end
 	
-	# Panel				A window whose colour changes according to current user settings
-	def panel(params = {})
+	def panel(params = {})				# Panel					A window whose colour changes according to current user settings
 		parent, id, pos, size, style = read_default_params(params, Wx::TAB_TRAVERSAL)
 		my_panel = Wx::Panel.new(parent, id, pos, size, style)
 		add_to_parent(my_panel, parent, params)
 		push_container(my_panel) { yield } if block_given?
 	end
 	
-	# TODO: SashLayoutWindow		Window that can be involved in an IDE-like layout arrangement
-	def sash_window_layout(params = {})
+	def sash_window_layout(params = {})	# TODO: SashLayoutWindow		Window that can be involved in an IDE-like layout arrangement
 		parent, id, pos, size, style = read_default_params(params, Wx::SW_3D)
 		my_sash_layout_window = Wx::SashLayoutWindow.new(parent, id, pos, size, style)
 		add_to_parent(my_sash_layout_window, parent, params)
 		push_container(my_sash_layout_window) { yield } if block_given?
 	end
 	
-	# TODO: SashWindow			Window with four optional sashes that can be dragged
-	def sash_window(params = {})
+	def sash_window(params = {})		# TODO: SashWindow			Window with four optional sashes that can be dragged
 		parent, id, pos, size, style = read_default_params(params, Wx::SW_3D)
 		my_sash_window = Wx::SashWindow.new(parent, id, pos, size, style)
 		add_to_parent(my_sash_window, parent, params)
 		push_container(my_sash_window) { yield } if block_given?
 	end
 	
-	# TODO: ScrolledWindow		Window with automatically managed scrollbars
-	def scrolled_window(params = {})
+	def scrolled_window(params = {})	# TODO: ScrolledWindow		Window with automatically managed scrollbars
 		parent, id, pos, size, style = read_default_params(params, (Wx::VSCROLL | Wx::HSCROLL))
 		my_scrolled_window = Wx::ScrolledWindow.new(parent, id, pos, size, style) 
 		add_to_parent(my_scrolled_window, parent, params)
 		push_container(my_scrolled_window) { yield } if block_given?
 	end
 	
-	# TODO: SplitterWindow		Window which can be split vertically or horizontally
-	def splitter_window(params = {})
+	def splitter_window(params = {})	# TODO: SplitterWindow		Window which can be split vertically or horizontally
 		parent, id, pos, size, style = read_default_params(params, Wx::SP_3D)
 		my_splitter_window = Wx::SplitterWindow.new(parent, id, pos, size, style)
 		add_to_parent(my_grid, parent, params)
 		push_container(my_grid) { yield } if block_given?
 	end
 	
-	# StatusBar			A status bar on a frame
-	def status_bar(params = {})
+	def status_bar(params = {})			# StatusBar			A status bar on a frame
 		parent, id, pos, size, style = read_default_params(params, Wx::ST_SIZEGRIP)
 		text = params[:text]
 		my_status_bar = Wx::StatusBar.new(parent, id, style)
@@ -108,11 +97,8 @@ module WxShoesControls
 		my_status_bar.push_status_text text if text
 		my_status_bar
 	end
-	
-	##ToolBar				Toolbar with buttons - will not implement here.  Use Frame#create_tool_bar instead.
-	
-	# TODO: VScrolledWindow		As ScrolledWindow but supports lines of variable height
-	def vscrolled_window(params = {})
+		
+	def vscrolled_window(params = {})	# TODO: VScrolledWindow		As ScrolledWindow but supports lines of variable height
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_vscrolled_window = VScrolledWindow.new(parent, id, pos, size, style) 
 		add_to_parent(my_vscrolled_window, parent, params)
@@ -121,30 +107,12 @@ module WxShoesControls
 	
 	# TODO:WizardPage			A base class for a page in wizard dialog.
 	# TODO:WizardPageSimple		A page in wizard dialog.
-	
-	def push_container(container)
-		@containers.push(container)
-		yield
-		@containers.pop
-		container
-	end
-	
-	def add_to_parent(container, parent, params)
-		add_to_page(container, parent, params) if parent.class.method_defined?(:add_page)
-	end
-	
-	def add_to_page(container, parent, params)
-		title = params[:title] || ''
-		selected = params[:selected] || false
-		imageId = params[:imageId] || -1
-		parent.add_page(container, title, selected, imageId) 
-	end
+	# ToolBar				Toolbar with buttons - will not implement here.  Use Frame#create_tool_bar instead.
 	
 #########################################################################################################
 # Window Layout
 #########################################################################################################
-	# BoxSizer				A sizer for laying out windows in a row or column
-	def box_sizer(orientation, params = {})
+	def box_sizer(orientation, params = {})		# BoxSizer				A sizer for laying out windows in a row or column
 		my_sizer = Wx::BoxSizer.new(orientation)
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
@@ -157,8 +125,7 @@ module WxShoesControls
 		box_sizer(Wx::VERTICAL, params) { yield } if block_given?
 	end
 	
-	# FlexGridSizer			A sizer for laying out windows in a flexible grid
-	def flex_grid_sizer(params = {})
+	def flex_grid_sizer(params = {})			# FlexGridSizer			A sizer for laying out windows in a flexible grid
 		rows = params[:rows]
 		cols = params[:cols] || 0
 		vgap = params[:vgap] || 0 
@@ -171,16 +138,14 @@ module WxShoesControls
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
 	
-	# TODO: GridBagSizer			Another grid sizer that lets you specify the cell an item is in, and items can span rows and/or columns.
-	def grid_bag_sizer(params = {})
+	def grid_bag_sizer(params = {})				# TODO: GridBagSizer			Another grid sizer that lets you specify the cell an item is in, and items can span rows and/or columns.
 		vgap = params[:vgap] || 0 
 		hgap = params[:hgap] || 0
 		my_sizer = Wx::GridBagSizer.new(vgap, hgap)
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
 	
-	# TODO: GridSizer				A sizer for laying out windows in a grid with all fields having the same size
-	def grid_sizer(params = {})
+	def grid_sizer(params = {})					# TODO: GridSizer				A sizer for laying out windows in a grid with all fields having the same size
 		rows = params[:rows]
 		cols = params[:cols] || 0
 		vgap = params[:vgap] || 0 
@@ -193,8 +158,7 @@ module WxShoesControls
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
 	
-	# TODO: StaticBoxSizer			Same as wxBoxSizer, but with a surrounding static box
-	def static_box_sizer(params = {})
+	def static_box_sizer(params = {})			# TODO: StaticBoxSizer			Same as wxBoxSizer, but with a surrounding static box
 		orient = params[:orient] || Wx::VERTICAL
 		my_sizer = if params[:box]
 			Wx::StaticBoxSizer.new(params[:box], orient)
@@ -205,38 +169,11 @@ module WxShoesControls
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
 	
-	# StdDialogButtonSizer		Sizer for arranging buttons on a dialog, in platform-standard order
-	def std_dialog_button_sizer(params = {})
+	def std_dialog_button_sizer(params = {})	# StdDialogButtonSizer		Sizer for arranging buttons on a dialog, in platform-standard order
 		my_sizer = Wx::StdDialogButtonSizer.new
 		push_sizer(my_sizer, params) { yield } if block_given?
 	end
-	
-	def push_sizer(sizer, params = {})
-		if params[:container]
-			params[:container].set_sizer(sizer)
-		elsif @sizers.empty?
-			@containers.last.set_sizer(sizer)
-		else
-			add_to_sizer(sizer, params)
-		end
-		@sizers.push sizer
-		yield
-		@sizers.pop
-		sizer
-	end
-	
-	def add_to_sizer(control, params = {})
-		sizer = params[:sizer] || @sizers.last
-		if sizer
-			proportion = params[:proportion] || 0
-			flag = params[:flag] || (Wx::GROW|Wx::ALL)
-			border = params[:border] || 2 
-			userData = params[:userData]
-			sizer.add(control, proportion, flag, border, userData)
-		end
-		control
-	end
-	
+			
 	def add_spacer(params = {})
 		sizer = params[:sizer] || @sizers.last
 		width = params[:width] || 0 
@@ -251,16 +188,14 @@ module WxShoesControls
 #########################################################################################################
 # Controls
 #########################################################################################################
-	# TODO: AnimationCtrl		For displaying a looping animation
-	def animation_ctrl(params = {})
+	def animation_ctrl(params = {})		# TODO: AnimationCtrl		For displaying a looping animation
 		parent, id, pos, size, style = read_default_params(params, Wx::AC_DEFAULT_STYLE)
 		anim = params[:anim]
 		my_animation_ctrl = Wx::AnimationCtrl.new(parent, id, anim, pos, size, style) 
 		add_to_sizer(my_animation_ctrl, params)
 	end
-	
-	# TODO: BitmapButton		Push button control, displaying a bitmap
-	def bitmap_button(params = {})
+		
+	def bitmap_button(params = {})		# TODO: BitmapButton		Push button control, displaying a bitmap
 		parent, id, pos, size, style = read_default_params(params, 0)
 		bitmap = params[:bitmap]
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR	
@@ -269,8 +204,7 @@ module WxShoesControls
 		add_to_sizer(my_bitmap_button, params)
 	end
 	
-	# TODO: BitmapComboBox	A ComboBox where each item can have an image
-	def bitmap_combo_box(params = {})
+	def bitmap_combo_box(params = {})	# TODO: BitmapComboBox	A ComboBox where each item can have an image
 		parent, id, pos, size, style = read_default_params(params, 0)
 		value = params[:value] || ''
 		n = params[:n] || 0
@@ -280,8 +214,7 @@ module WxShoesControls
 		add_to_sizer(my_bitmap_combo_box, params)
 	end
 	
-	# Button		Push button control, displaying text
-	def button(params = {})
+	def button(params = {})				# Button		Push button control, displaying text
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] || ''
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR		
@@ -290,16 +223,14 @@ module WxShoesControls
 		add_to_sizer(my_button, params)
 	end
 	
-	# TODO: CalendarCtrl		Control showing an entire calendar month
-	def calendar_ctrl(params = {})
+	def calendar_ctrl(params = {})		# TODO: CalendarCtrl		Control showing an entire calendar month
 		parent, id, pos, size, style = read_default_params(params, Wx::CAL_SHOW_HOLIDAYS)
 		date = params[:date] || Wx::DefaultDateTime
 		my_calendar_ctrl = Wx::CalendarCtrl.new(parent, id, date, pos, size, style) 
 		add_to_sizer(my_calendar_ctrl, params)
 	end
 	
-	# TODO: CheckBox		Checkbox control
-	def check_box(params = {})
+	def check_box(params = {})			# TODO: CheckBox		Checkbox control
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] || ''
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -307,8 +238,7 @@ module WxShoesControls
 		add_to_sizer(my_checkbox, params)
 	end
 	
-	# TODO: CheckListBox		A listbox with a checkbox to the left of each item
-	def check_list_box(params = {})
+	def check_list_box(params = {})		# TODO: CheckListBox		A listbox with a checkbox to the left of each item
 		parent, id, pos, size, style = read_default_params(params, 0)
 		choices = params[:choices] || []
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -316,8 +246,7 @@ module WxShoesControls
 		add_to_sizer(my_checklistbox, params)
 	end
 	
-	# TODO: Choice		Drop-down list from which the user can select one option
-	def choice(params = {})
+	def choice(params = {})				# TODO: Choice		Drop-down list from which the user can select one option
 		parent, id, pos, size, style = read_default_params(params, 0)
 		choices = params[:choices] || []
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -325,8 +254,7 @@ module WxShoesControls
 		add_to_sizer(my_choice, params)
 	end
 	
-	# ComboBox		A drop-down Choice with an editable text area
-	def combo_box(params = {})
+	def combo_box(params = {})			# ComboBox		A drop-down Choice with an editable text area
 		parent, id, pos, size, style = read_default_params(params, 0)
 		value = params[:value] || ''
 		choices = params[:choices] || []
@@ -335,8 +263,7 @@ module WxShoesControls
 		add_to_sizer(my_combo_box, params)
 	end
 	
-	# TODO: DatePickerCtrl	Small date picker control
-	def date_picker_ctrl(params = {})
+	def date_picker_ctrl(params = {})	# TODO: DatePickerCtrl	Small date picker control
 		parent, id, pos, size, style = read_default_params(params, (Wx::DP_DEFAULT | Wx::DP_SHOWCENTURY))
 		dt = params[:dt] || Wx::DefaultDateTime
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -344,8 +271,7 @@ module WxShoesControls
 		add_to_sizer(my_date_picker_ctrl, params)
 	end
 	
-	# TODO: Gauge			A control to represent a varying quantity, such as time remaining
-	def gauge(params = {})
+	def gauge(params = {})				# TODO: Gauge			A control to represent a varying quantity, such as time remaining
 		parent, id, pos, size, style = read_default_params(params, Wx::GA_HORIZONTAL)
 		range = params[:range] 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -353,8 +279,7 @@ module WxShoesControls
 		add_to_sizer(my_gauge, params)
 	end
 	
-	# TODO: GenericDirCtrl	A control for displaying a directory tree
-	def generic_dir_ctrl(params = {})
+	def generic_dir_ctrl(params = {})	# TODO: GenericDirCtrl	A control for displaying a directory tree
 		parent, id, pos, size, style = read_default_params(params, (Wx::DIRCTRL_3D_INTERNAL|Wx::SUNKEN_BORDER))
 		dir = params[:dir] || Wx::DirDialogDefaultFolderStr
 		filter = params[:filter] || ''
@@ -363,15 +288,13 @@ module WxShoesControls
 		add_to_sizer(my_generic_dir_ctrl, params)
 	end
 	
-	# TODO: HtmlListBox		A listbox showing HTML content
-	def html_list_box(params = {})
+	def html_list_box(params = {})		# TODO: HtmlListBox		A listbox showing HTML content
 		parent, id, pos, size, style = read_default_params(params, 0)
 		my_html_list_box = Wx::HtmlListBox.new(parent, id, pos, size, style) 
 		add_to_sizer(my_html_list_box, params)
 	end
 	
-	# TODO: HyperlinkCtrl		Displays a clickable URL that will launch a browser
-	def hyperlink_ctrl(params = {})
+	def hyperlink_ctrl(params = {})		# TODO: HyperlinkCtrl		Displays a clickable URL that will launch a browser
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] 
 		url = params[:url]
@@ -379,8 +302,7 @@ module WxShoesControls
 		add_to_sizer(my_hyperlink_ctrl, params)
 	end
 	
-	# TODO: ListBox		A list of strings for single or multiple selection
-	def list_box(params = {})
+	def list_box(params = {})			# TODO: ListBox		A list of strings for single or multiple selection
 		parent, id, pos, size, style = read_default_params(params, 0)
 		choices = params[:choices] 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -388,8 +310,7 @@ module WxShoesControls
 		add_to_sizer(my_list_box, params)
 	end
 	
-	# TODO: ListCtrl		A control for displaying lists of strings and/or icons, plus a multicolumn report view
-	def list_ctrl(params = {})
+	def list_ctrl(params = {})			# TODO: ListCtrl		A control for displaying lists of strings and/or icons, plus a multicolumn report view
 		parent, id, pos, size, style = read_default_params(params, Wx::LC_ICON)
 		range = params[:range] 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -397,8 +318,7 @@ module WxShoesControls
 		add_to_sizer(my_list_ctrl, params)
 	end
 	
-	# TODO: MediaCtrl		A control for playing sound and video
-	def media_ctrl(params = {})
+	def media_ctrl(params = {})			# TODO: MediaCtrl		A control for playing sound and video
 		parent, id, pos, size, style = read_default_params(params, 0)
 		fileName = params[:fileName] || ''
 		backend = params[:backend] || ''
@@ -407,8 +327,7 @@ module WxShoesControls
 		add_to_sizer(my_media_ctrl, params)
 	end
 	
-	# RadioBox		A group of radio buttons
-	def radio_box(params = {})
+	def radio_box(params = {})			# RadioBox		A group of radio buttons
 		parent, id, pos, size, style = read_default_params(params, Wx::RA_SPECIFY_COLS)
 		label = params[:label] 
 		n = params[:n] || 0 
@@ -420,8 +339,7 @@ module WxShoesControls
 		add_to_sizer(my_radio_box, params)
 	end
 	
-	# TODO: RadioButton		A round button to be used with others in a mutually exclusive way
-	def radio_button(params = {})
+	def radio_button(params = {})		# TODO: RadioButton		A round button to be used with others in a mutually exclusive way
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -429,8 +347,7 @@ module WxShoesControls
 		add_to_sizer(my_radio_button, params)
 	end
 	
-	# TODO: RichTextCtrl		Advanced text-editing control with styles and inline images
-	def rich_text_ctrl(params = {})
+	def rich_text_ctrl(params = {})		# TODO: RichTextCtrl		Advanced text-editing control with styles and inline images
 		parent, id, pos, size, style = read_default_params(params, Wx::RE_MULTILINE)
 		value = params[:value] || ''
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -438,16 +355,14 @@ module WxShoesControls
 		add_to_sizer(my_rich_text_ctrl, params)
 	end
 	
-	# TODO: ScrollBar		Scrollbar control
-	def scroll_bar(params = {})
+	def scroll_bar(params = {})			# TODO: ScrollBar		Scrollbar control
 		parent, id, pos, size, style = read_default_params(params, Wx::SB_HORIZONTAL)
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
 		my_scroll_bar = Wx::ScrollBar.new(parent, id, pos, size, style, validator) 
 		add_to_sizer(my_scroll_bar, params)
 	end 
 
-	# TODO: Slider		A slider that can be dragged by the user
-	def slider(params = {})
+	def slider(params = {})				# TODO: Slider		A slider that can be dragged by the user
 		parent, id, pos, size, style = read_default_params(params, Wx::SL_HORIZONTAL)
 		value = params[:value] 
 		minValue = params[:minValue] 
@@ -457,15 +372,13 @@ module WxShoesControls
 		add_to_sizer(my_slider, params)
 	end
 
-	# TODO: SpinButton		A spin or up-down control
-	def spin_button(params = {})
+	def spin_button(params = {})		# TODO: SpinButton		A spin or up-down control
 		parent, id, pos, size, style = read_default_params(params, Wx::SP_HORIZONTAL)
 		my_spin_button = Wx::SpinButton.new(parent, id, pos, size, style) 
 		add_to_sizer(my_spin_button, params)
 	end
 
-	# TODO: SpinCtrl		A spin control - i.e. spin button and text control
-	def spin_ctrl(params = {})
+	def spin_ctrl(params = {})			# TODO: SpinCtrl		A spin control - i.e. spin button and text control
 		parent, id, pos, size, style = read_default_params(params, Wx::SP_ARROW_KEYS)
 		value = params[:value] || ''
 		min = params[:min] || 0 
@@ -475,24 +388,21 @@ module WxShoesControls
 		add_to_sizer(my_spin_ctrl, params)
 	end
 
-	# TODO: StaticBitmap		A control to display a bitmap
-	def static_bitmap(params = {})
+	def static_bitmap(params = {})		# TODO: StaticBitmap		A control to display a bitmap
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] 
 		my_static_bitmap = Wx::StaticBitmap.new(parent, id, label, pos, size, style) 
 		add_to_sizer(my_static_bitmap, params)
 	end
 	
-	# TODO: StaticBox		A static, or group box for visually grouping related controls
-	def static_box(params = {})
+	def static_box(params = {})			# TODO: StaticBox		A static, or group box for visually grouping related controls
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] || ''
 		my_static_box = Wx::StaticBox.new(parent, id, label, pos, size, style)
 		add_to_sizer(my_static_box, params)
 	end
 	
-	# StaticText		One or more lines of non-editable text
-	def static_text(params = {})
+	def static_text(params = {})		# StaticText		One or more lines of non-editable text
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] || ''
 		my_label = Wx::StaticText.new(parent, id, label, pos, size, style)
@@ -503,8 +413,7 @@ module WxShoesControls
 	# TODO:StyledTextCtrl	Sophisticated code text editor based on Scintilla
 	# Do later - the wxRuby documentation doesn't include the contructor...WTF?
 	
-	# TextCtrl		Single or multiline text editing control
-	def text_ctrl(params = {})
+	def text_ctrl(params = {})			# TextCtrl		Single or multiline text editing control
 		parent, id, pos, size, style = read_default_params(params, 0)
 		value = params[:value] || ''
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -512,8 +421,7 @@ module WxShoesControls
 		add_to_sizer(my_text_ctrl, params)
 	end
 	
-	# TODO: ToggleButton		A button which stays pressed when clicked by user.
-	def toggle_button(params = {})
+	def toggle_button(params = {})		# TODO: ToggleButton		A button which stays pressed when clicked by user.
 		parent, id, pos, size, style = read_default_params(params, 0)
 		label = params[:label] 
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
@@ -521,16 +429,14 @@ module WxShoesControls
 		add_to_sizer(my_toggle_button, params)
 	end
 
-	# TODO: TreeCtrl		Tree (hierarchy) control
-	def tree_ctrl(params = {})
+	def tree_ctrl(params = {})			# TODO: TreeCtrl		Tree (hierarchy) control
 		parent, id, pos, size, style = read_default_params(params, Wx::TR_HAS_BUTTONS)
 		validator = params[:validator] || Wx::DEFAULT_VALIDATOR
 		my_tree_ctrl = Wx::TreeCtrl.new(parent, id, pos, size, style, validator) 
 		add_to_sizer(my_tree_ctrl, params)
 	end 
 
-	# TODO: VListBox		A listbox supporting variable height rows
-	def vlist_box(params = {})
+	def vlist_box(params = {})			# TODO: VListBox		A listbox supporting variable height rows
 		parent, id, pos, size, style = read_default_params(params, 0)
 		countItems = params[:countItems] || 0
 		my_vlist_box = Wx::VListBox.new(parent, id, pos, size, countItems, style) 
@@ -541,42 +447,36 @@ module WxShoesControls
 #########################################################################################################
 # Menus
 #########################################################################################################
-	# Menu			Displays a series of menu items for selection
-	def menu(params = {})
-		title = params[:title] || ''
-		style = params[:style] || 0
+	def menu(title = '', style = 0)		# Menu			Displays a series of menu items for selection
 		my_menu = Wx::Menu.new('', style)
 		@containers.last.append(my_menu, title)
 		push_container(my_menu) { yield } if block_given?
 	end
 	
-	# MenuBar		Contains a series of menus for use with a frame
-	def menu_bar(params = {})
-		style = params[:style] || 0
+	def menu_bar(style = 0)				# MenuBar		Contains a series of menus for use with a frame
 		my_menu_bar = Wx::MenuBar.new(style)
 		@containers.first.set_menu_bar(my_menu_bar)
 		push_container(my_menu_bar) { yield } if block_given?
 	end
 	
-	# MenuItem		Represents a single menu item
-	def menu_item(params = {})
-		id = params[:id] || -1
-		text = params[:text] || ''
-		helpString = params[:helpString] || ''
-		kind = params[:kind] || Wx::ITEM_NORMAL
-		my_menu_item = Wx::MenuItem.new(nil, id, text, helpString, kind)
-		if params.has_key?(:parentMenu)
-			params[:parentMenu].append_item(my_menu_item)
-		elsif @containers.last.instance_of?(Wx::Menu)
-			@containers.last.append_item(my_menu_item)
+	def menu_item(parentMenu = nil, id = -1, text = '', helpString = '', kind = Wx::ITEM_NORMAL, subMenu = nil, checked = false)		# MenuItem		Represents a single menu item
+		puts "Creating menu item #{text}. Checked = #{checked}.  Kind = #{kind}"
+		puts "Normal = #{Wx::ITEM_NORMAL}"
+		puts "Checked = #{Wx::ITEM_CHECK}"
+		parentMenu = @containers.last unless parentMenu
+		if parentMenu.class.method_defined?(:append_item)
+			my_menu_item = Wx::MenuItem.new(parentMenu, id, text, helpString, kind)
+			parentMenu.append_item(my_menu_item)
+			if (kind == Wx::ITEM_CHECK) && params[:checked]
+				puts "Checking menu item #{text}"
+				my_menu_item.check(true) 
+			end
+			@containers.first.evt_menu(my_menu_item) { |event| yield(event) } if block_given?
 		end
-		@containers.first.evt_menu(my_menu_item) { yield } if block_given?
 	end
 	
-	def menu_separator(params = {})
-		params[:id] = Wx::ID_SEPARATOR
-		params[:kind] = Wx::ITEM_SEPARATOR
-		menu_item(params)
+	def menu_separator
+		menu_item(:id => Wx::ID_SEPARATOR, :kind => Wx::ITEM_SEPARATOR)
 	end
 
 #########################################################################################################
@@ -606,6 +506,54 @@ module WxShoesControls
 	# TODO: HtmlHelpController	HTML help controller class
 	# TODO: HtmlWindow			HTML window class, for displaying HTML
 	# TODO: HtmlEasyPrinting		Simple but useful class for printing HTML
+	
+#########################################################################################################
+# Helper methods
+#########################################################################################################
+private
+	def add_to_page(container, parent, params)
+		title = params[:title] || ''
+		selected = params[:selected] || false
+		imageId = params[:imageId] || -1
+		parent.add_page(container, title, selected, imageId) 
+	end
+	
+	def add_to_parent(container, parent, params)
+		add_to_page(container, parent, params) if parent.class.method_defined?(:add_page)
+	end
+	
+	def add_to_sizer(control, params = {})
+		sizer = params[:sizer] || @sizers.last
+		if sizer
+			proportion = params[:proportion] || 0
+			flag = params[:flag] || (Wx::GROW|Wx::ALL)
+			border = params[:border] || 2 
+			userData = params[:userData]
+			sizer.add(control, proportion, flag, border, userData)
+		end
+		control
+	end
+	
+	def push_container(container)
+		@containers.push(container)
+		yield
+		@containers.pop
+		container
+	end
+	
+	def push_sizer(sizer, params = {})
+		if params[:container]
+			params[:container].set_sizer(sizer)
+		elsif @sizers.empty?
+			@containers.last.set_sizer(sizer)
+		else
+			add_to_sizer(sizer, params)
+		end
+		@sizers.push sizer
+		yield
+		@sizers.pop
+		sizer
+	end
 	
 	def read_default_params(params, default_style)
 		parent = params[:parent] || @containers.last
