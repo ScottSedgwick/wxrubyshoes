@@ -1,12 +1,9 @@
 #!/usr/bin/env ruby
 # wxRuby2 Sample Code. Copyright (c) 2004-2008 wxRuby development team
 # Freely reusable code: see SAMPLES-LICENSE.TXT for details
-begin
-  require 'rubygems' 
-rescue LoadError
-end
+require 'rubygems' 
 require 'wx'
-
+require 'wxrubyshoes'
 include Wx
 
 Calendar_Cal_Monday = 200
@@ -18,150 +15,53 @@ Calendar_Cal_SeqMonth = 205
 Calendar_Cal_SurroundWeeks = 206
 
 
-class MyCalendar < CalendarCtrl
-  def initialize(parent, display_frame, initial_date, calendar_flags)
-    super( parent, 
-           :date  => initial_date, 
-           :style => calendar_flags | RAISED_BORDER)
+module MyCalendarModule
+	def included(mod)
+	    @weekday_names = %w|Sun Mon Tue Wed Thu Fri Sat|
 
-    @display = display_frame
-    @date = initial_date
-    @weekday_names = %w|Sun Mon Tue Wed Thu Fri Sat|
+	    evt_calendar self, :on_calendar
+	    evt_calendar_month self, :on_cal_month_change
+	    evt_calendar_year self, :on_cal_year_change
+	    evt_calendar_sel_changed self, :on_calendar_change
+	    evt_calendar_weekday_clicked self, :on_calendar_weekday_click
+	end
 
-    evt_calendar self, :on_calendar
-    evt_calendar_month self, :on_cal_month_change
-    evt_calendar_year self, :on_cal_year_change
-    evt_calendar_sel_changed self, :on_calendar_change
-    evt_calendar_weekday_clicked self, :on_calendar_weekday_click
-  end
+	def on_calendar(event)
+		@display.date = event.date
+	end
 
-  def on_calendar(event)
-    @display.date = event.date
-  end
+	def on_calendar_change(event)
+		@date = event.date
+		log_status("Selected date: #{@date.strftime('%A %d %B %Y')}")
+	end
 
-  def on_calendar_change(event)
-    @date = event.date
-    log_status("Selected date: #{@date.strftime('%A %d %B %Y')}")
-  end
+	def on_cal_month_change
+		log_status("Calendar month changed")
+	end
 
-  def on_cal_month_change
-    log_status("Calendar month changed")
-  end
+	def on_cal_year_change
+		log_status("Calendar year changed")
+	end
 
-  def on_cal_year_change
-    log_status("Calendar year changed")
-  end
+	def on_calendar_weekday_click(event)
+		wday = event.week_day
+		log_status("Clicked on #{@weekday_names[wday]}")
+	end
 
-  def on_calendar_weekday_click(event)
-    wday = event.week_day
-    log_status("Clicked on #{@weekday_names[wday]}")
-  end
-  
-  attr_reader :date
+	attr_reader :date
 end
 
-class MyFrame < Frame
-  def initialize(title)
-    super(nil, -1, title)
-    @panel = Wx::Panel.new(self)
-    add_menu_bar
-    add_status_bar
+module MyFrameController
+	def on_quit
+		# true is to force the frame to close
+		close(true)
+	end
 
-    @calendar_flags = CAL_MONDAY_FIRST | CAL_SHOW_HOLIDAYS
-
-    @calendar = MyCalendar.new(@panel, self, Time.now, @calendar_flags)
-
-    @sizer = BoxSizer.new(VERTICAL)
-    configure_window
-
-  	evt_menu Wx::ID_EXIT, :on_quit
-  	evt_menu Wx::ID_ABOUT, :on_about
-
-  	evt_menu Calendar_Cal_Monday, :on_cal_monday
-  	evt_menu Calendar_Cal_Holidays, :on_cal_holidays
-  	evt_menu Calendar_Cal_Special, :on_cal_special
-
-  	evt_menu Calendar_Cal_Month, :on_cal_allow_month
-  	evt_menu Calendar_Cal_Year, :on_cal_allow_year
-
-  	evt_menu Calendar_Cal_SeqMonth, :on_cal_seq_month
-  	evt_menu Calendar_Cal_SurroundWeeks, :on_cal_show_surrounding_weeks
-
-  	evt_update_ui Calendar_Cal_Year, :on_allow_year_update
-  end
-  
-  def add_menu_bar
-    # create a menu bar
-    menu_file = Menu.new
-
-    menu_file.append(Wx::ID_ABOUT, "&About...\tCtrl-A", "Show about dialog")
-    menu_file.append_separator
-    menu_file.append(Wx::ID_EXIT, "E&xit\tAlt-X", "Quit self program")
-
-    menu_cal = Menu.new
-    menu_cal.append(Calendar_Cal_Monday,
-                     "Monday &first weekday\tCtrl-F",
-                     "Toggle between Mon and Sun as the first week day",
-                     ITEM_CHECK)
-    menu_cal.append(Calendar_Cal_Holidays, "Show &holidays\tCtrl-H",
-                     "Toggle highlighting the holidays",
-                     ITEM_CHECK)
-    menu_cal.append(Calendar_Cal_Special, "Highlight &special dates\tCtrl-S",
-                     "Test custom highlighting",
-                     ITEM_CHECK)
-    menu_cal.append(Calendar_Cal_SurroundWeeks,
-                     "Show s&urrounding weeks\tCtrl-W",
-                     "Show the neighbouring weeks in the prev/next month",
-                     ITEM_CHECK)
-    menu_cal.append_separator
-    menu_cal.append(Calendar_Cal_SeqMonth,
-                     "To&ggle month selector style\tCtrl-G",
-                     "Use another style for the calendar controls",
-                     ITEM_CHECK)
-    menu_cal.append(Calendar_Cal_Month, "&Month can be changed\tCtrl-M",
-                     "Allow changing the month in the calendar",
-                     ITEM_CHECK)
-    menu_cal.append(Calendar_Cal_Year, "&Year can be changed\tCtrl-Y",
-                     "Allow changing the year in the calendar",
-                     ITEM_CHECK)
-
-    # now append the freshly created menu to the menu bar...
-    menu_bar = MenuBar.new
-    menu_bar.append(menu_file, "&File")
-    menu_bar.append(menu_cal, "&Calendar")
-
-    menu_bar.check(Calendar_Cal_Monday, TRUE)
-    menu_bar.check(Calendar_Cal_Holidays, TRUE)
-    menu_bar.check(Calendar_Cal_Month, TRUE)
-    menu_bar.check(Calendar_Cal_Year, TRUE)
-
-    # ... and attach self menu bar to the frame
-    self.menu_bar = menu_bar
-  end
-
-  def add_status_bar
-    # create a status bar just for fun (by default with 1 pane only)
-    create_status_bar
-    set_status_text("Welcome to Windows!")
-  end
-  
-  def configure_window
-    @sizer.add(@calendar, 0, Wx::ALIGN_CENTRE|Wx::ALL, 5)
-    @sizer.size_hints = @panel
-    layout
-    @panel.sizer = @sizer
-  end
-  
-  def on_quit
-    # true is to force the frame to close
-    close(true)
-  end
-
-  def on_about
-    message_box("wxRuby CalendarCtrl sample\nby Kevin Smith\n" +
-                 "based on the wxWidgets version by Vadim Zeitlin",
-                 "About Calendar", OK | ICON_INFORMATION, self)
-  end
+	def on_about
+		message_box("wxRuby CalendarCtrl sample\nby Kevin Smith\n" +
+					"based on the wxWidgets version by Vadim Zeitlin",
+					"About Calendar", OK | ICON_INFORMATION, self)
+	end
 
   def on_cal_monday(event)
     enable = get_menu_bar().is_checked(event.get_id())
@@ -211,8 +111,8 @@ class MyFrame < Frame
     else
       style &= ~flag
     end
-    @calendar = MyCalendar.new(@panel, self, date, style)
-    @sizer.add(@calendar, 0, Wx::ALIGN_CENTRE|Wx::ALL, 5)
+	@calendar = calendar_ctrl(:date => date, :style => style, :parent => @panel, :sizer => @sizer)
+	@calendar.extend(MyCalendarModule)
     @panel.layout
   end
 
@@ -241,16 +141,64 @@ class MyFrame < Frame
     Wx::MessageDialog.new( self, "The selected date is #{str}", 
                            "Date chosen" ).show_modal
   end
+end
+
+WxShoes.App do
+	frame(:controller => MyFrameController) do
+		menu_bar do
+			menu(:title => '&File') do
+				menu_item(:text => "&About...\tCtrl-A", :helpString => "Show about dialog") { |event| on_about }
+			    menu_separator
+			    menu_item(:text => "E&xit\tAlt-X", :helpString => "Quit self program") { |event| on_quit }
+			end
+			# menu(:title => '&Calendar') do
+			    # menu_item(:text => "Monday &first weekday\tCtrl-F", 
+						  # :helpString => "Toggle between Mon and Sun as the first week day",
+						  # :checked => true,
+			              # :style => ITEM_CHECK) { |event| on_cal_monday(event) }
+			    # menu_item(:text => "Show &holidays\tCtrl-H",
+			              # :helpString => "Toggle highlighting the holidays",
+						  # :checked => true,
+			              # :style => ITEM_CHECK) { |event| on_cal_holidays(event) }
+			    # menu_item(:text => "Highlight &special dates\tCtrl-S",
+			              # :helpString => "Test custom highlighting",
+			              # :style => ITEM_CHECK) { |event| on_cal_special(event) }
+			    # menu_item(:text => "Show s&urrounding weeks\tCtrl-W",
+			              # :helpString => "Show the neighbouring weeks in the prev/next month",
+			              # :style => ITEM_CHECK) { |event| on_cal_show_surrounding_weeks(event) }
+			    # menu_separator
+			    # menu_item(:text => "To&ggle month selector style\tCtrl-G",
+			              # :helpString => "Use another style for the calendar controls",
+			              # :style => ITEM_CHECK) { |event| on_cal_seq_month(event) }
+			    # menu_item(:text => "&Month can be changed\tCtrl-M",
+			              # :helpString => "Allow changing the month in the calendar",
+						  # :checked => true,
+			              # :style => ITEM_CHECK) { |event| on_cal_allow_month(event) }
+			    # menu_item(:text => "&Year can be changed\tCtrl-Y",
+			              # :helpString => "Allow changing the year in the calendar",
+						  # :checked => true,
+			              # :style => ITEM_CHECK) { |event| on_cal_allow_year(event) }
+			# end
+			# menu_bar.check(Calendar_Cal_Monday, TRUE)
+			# menu_bar.check(Calendar_Cal_Holidays, TRUE)
+			# menu_bar.check(Calendar_Cal_Month, TRUE)
+			# menu_bar.check(Calendar_Cal_Year, TRUE)
+		end
+		status_bar(:text => 'Welcome to Windows!')
+		@panel = panel do
+			@sizer = vbox_sizer do
+				@calendar = calendar_ctrl(:date => Time.now, :style => (CAL_MONDAY_FIRST | CAL_SHOW_HOLIDAYS), :flag => (ALIGN_CENTRE|ALL))
+				@calendar.extend(MyCalendarModule)
+			end
+		end
+		@panel.layout
+	end
+end
+
+class MyFrame < Frame
+  def initialize(title)
+
+  	evt_update_ui Calendar_Cal_Year, :on_allow_year_update
+  end
   
 end
-
-
-class RbApp < App
-  def on_init()
-    frame = MyFrame.new("Calendar Windows sample")
-    frame.show(true)
-  end
-end
-
-a = RbApp.new
-a.main_loop()

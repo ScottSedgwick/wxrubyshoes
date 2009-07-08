@@ -61,6 +61,48 @@ namespace :demo do
 		task :sockets do
 		end
 	end
+	namespace :new do
+		# This gets most of the examples...
+		FileList.new('samples/samples_wxshoes/*').to_a.each do |path|
+			if File.directory?(path) 
+				basename = File.basename(path)
+				if File.exists?("#{path}/#{basename}.rb")
+					desc "New #{basename} sample"
+					task basename.to_sym do
+						sh "ruby -Ilib #{path}/#{basename}.rb"
+					end
+				end
+			end
+		end
+		
+		# Special cases...
+		namespace :bigdemo do
+			FileList.new('samples/samples_wxshoes/bigdemo/*.rbw').to_a.each do |filename|
+				basename = File.basename(filename)
+				basename.gsub!(File.extname(basename), '')
+				desc "New BigDemo sample (#{basename}"
+				task basename.to_sym do
+					sh "ruby -Ilib samples/samples_wxshoes/bigdemo/run.rb #{filename}"
+				end
+			end
+		end
+		
+		['drawing', 'etc', 'opengl', 'text', 'xrc'].each do |path|
+			namespace path.to_sym do
+				FileList.new("samples/samples_wxshoes/#{path}/*.rb").to_a.each do |filename|
+					basename = File.basename(filename)
+					basename.gsub!(File.extname(basename), '')
+					desc "New #{path} sample (#{basename}"
+					task basename.to_sym do
+						sh "ruby -Ilib #{filename}"
+					end
+				end
+			end
+		end
+		
+		task :sockets do
+		end
+	end
 end
 
 desc 'Run the example app'
