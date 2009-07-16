@@ -1,5 +1,6 @@
 require 'rubygems'
 require 'wx'
+require 'date'
 
 module WxShoesControls
 #########################################################################################################
@@ -225,7 +226,7 @@ module WxShoesControls
 	
 	def calendar_ctrl(params = {})		# TODO: CalendarCtrl		Control showing an entire calendar month
 		parent, id, pos, size, style = read_default_params(params, Wx::CAL_SHOW_HOLIDAYS)
-		date = params[:date] || Wx::DefaultDateTime
+		date = params[:date] || DateTime.now
 		my_calendar_ctrl = Wx::CalendarCtrl.new(parent, id, date, pos, size, style) 
 		add_to_sizer(my_calendar_ctrl, params)
 	end
@@ -447,28 +448,34 @@ module WxShoesControls
 #########################################################################################################
 # Menus
 #########################################################################################################
-	def menu(title = '', style = 0)		# Menu			Displays a series of menu items for selection
+	def menu(params = {})		# Menu			Displays a series of menu items for selection
+		title = params[:title] || ''
+		style = params[:style] || 0
 		my_menu = Wx::Menu.new('', style)
-		@containers.last.append(my_menu, title)
-		push_container(my_menu) { yield } if block_given?
+		@menus.last.append(my_menu, title)
+		push_menu(my_menu) { yield } if block_given?
 	end
 	
-	def menu_bar(style = 0)				# MenuBar		Contains a series of menus for use with a frame
+	def menu_bar(params = {})				# MenuBar		Contains a series of menus for use with a frame
+		style = params[:style] || 0
 		my_menu_bar = Wx::MenuBar.new(style)
 		@containers.first.set_menu_bar(my_menu_bar)
-		push_container(my_menu_bar) { yield } if block_given?
+		push_menu(my_menu_bar) { yield } if block_given?
 	end
 	
-	def menu_item(parentMenu = nil, id = -1, text = '', helpString = '', kind = Wx::ITEM_NORMAL, subMenu = nil, checked = false)		# MenuItem		Represents a single menu item
-		puts "Creating menu item #{text}. Checked = #{checked}.  Kind = #{kind}"
-		puts "Normal = #{Wx::ITEM_NORMAL}"
-		puts "Checked = #{Wx::ITEM_CHECK}"
-		parentMenu = @containers.last unless parentMenu
+	def menu_item(params = {})		# MenuItem		Represents a single menu item
+		parentMenu = params[:parentMenu] 
+		id = params[:id] || -1
+		text = params[:text] || ''
+		helpString = params[:helpString] || ''
+		kind = params[:kind] || Wx::ITEM_NORMAL
+		subMenu = params[:subMenu]
+		checked = params[:checked] || false
+		parentMenu ||= @menus.last
 		if parentMenu.class.method_defined?(:append_item)
 			my_menu_item = Wx::MenuItem.new(parentMenu, id, text, helpString, kind)
 			parentMenu.append_item(my_menu_item)
 			if (kind == Wx::ITEM_CHECK) && params[:checked]
-				puts "Checking menu item #{text}"
 				my_menu_item.check(true) 
 			end
 			@containers.first.evt_menu(my_menu_item) { |event| yield(event) } if block_given?
@@ -541,6 +548,13 @@ private
 		container
 	end
 	
+	def push_menu(menu)
+		@menus.push(menu)
+		yield
+		@menus.pop
+		menu
+	end
+	
 	def push_sizer(sizer, params = {})
 		if params[:container]
 			params[:container].set_sizer(sizer)
@@ -570,6 +584,7 @@ class WxShoesFrame < Wx::Frame
 	def initialize(params = {})		
 		@containers = []
 		@containers.push(self)
+		@menus = []
 		@sizers = []
 		parent, id, pos, size, style = read_default_params(params, Wx::DEFAULT_FRAME_STYLE)
 		parent = parent.instance_of?(Wx::Window) ? parent : nil

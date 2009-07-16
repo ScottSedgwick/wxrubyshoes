@@ -16,14 +16,15 @@ Calendar_Cal_SurroundWeeks = 206
 
 
 module MyCalendarModule
-	def included(mod)
+	def self.attach(calendar)
+		calendar.extend(MyCalendarModule)
 	    @weekday_names = %w|Sun Mon Tue Wed Thu Fri Sat|
 
-	    evt_calendar self, :on_calendar
-	    evt_calendar_month self, :on_cal_month_change
-	    evt_calendar_year self, :on_cal_year_change
-	    evt_calendar_sel_changed self, :on_calendar_change
-	    evt_calendar_weekday_clicked self, :on_calendar_weekday_click
+	    calendar.evt_calendar calendar, :on_calendar
+	    calendar.evt_calendar_month calendar, :on_cal_month_change
+	    calendar.evt_calendar_year calendar, :on_cal_year_change
+	    calendar.evt_calendar_sel_changed calendar, :on_calendar_change
+	    calendar.evt_calendar_weekday_clicked calendar, :on_calendar_weekday_click
 	end
 
 	def on_calendar(event)
@@ -112,7 +113,8 @@ module MyFrameController
       style &= ~flag
     end
 	@calendar = calendar_ctrl(:date => date, :style => style, :parent => @panel, :sizer => @sizer)
-	@calendar.extend(MyCalendarModule)
+	MyCalendarModule.attach(@calendar)
+    @sizer.add(@calendar, 0, Wx::ALIGN_CENTRE|Wx::ALL, 5)
     @panel.layout
   end
 
@@ -151,34 +153,34 @@ WxShoes.App do
 			    menu_separator
 			    menu_item(:text => "E&xit\tAlt-X", :helpString => "Quit self program") { |event| on_quit }
 			end
-			# menu(:title => '&Calendar') do
-			    # menu_item(:text => "Monday &first weekday\tCtrl-F", 
-						  # :helpString => "Toggle between Mon and Sun as the first week day",
-						  # :checked => true,
-			              # :style => ITEM_CHECK) { |event| on_cal_monday(event) }
-			    # menu_item(:text => "Show &holidays\tCtrl-H",
-			              # :helpString => "Toggle highlighting the holidays",
-						  # :checked => true,
-			              # :style => ITEM_CHECK) { |event| on_cal_holidays(event) }
-			    # menu_item(:text => "Highlight &special dates\tCtrl-S",
-			              # :helpString => "Test custom highlighting",
-			              # :style => ITEM_CHECK) { |event| on_cal_special(event) }
-			    # menu_item(:text => "Show s&urrounding weeks\tCtrl-W",
-			              # :helpString => "Show the neighbouring weeks in the prev/next month",
-			              # :style => ITEM_CHECK) { |event| on_cal_show_surrounding_weeks(event) }
-			    # menu_separator
-			    # menu_item(:text => "To&ggle month selector style\tCtrl-G",
-			              # :helpString => "Use another style for the calendar controls",
-			              # :style => ITEM_CHECK) { |event| on_cal_seq_month(event) }
-			    # menu_item(:text => "&Month can be changed\tCtrl-M",
-			              # :helpString => "Allow changing the month in the calendar",
-						  # :checked => true,
-			              # :style => ITEM_CHECK) { |event| on_cal_allow_month(event) }
-			    # menu_item(:text => "&Year can be changed\tCtrl-Y",
-			              # :helpString => "Allow changing the year in the calendar",
-						  # :checked => true,
-			              # :style => ITEM_CHECK) { |event| on_cal_allow_year(event) }
-			# end
+			menu(:title => '&Calendar') do
+			    menu_item(:text => "Monday &first weekday\tCtrl-F", 
+						  :helpString => "Toggle between Mon and Sun as the first week day",
+						  :checked => true,
+			              :style => ITEM_CHECK) { |event| on_cal_monday(event) }
+			    menu_item(:text => "Show &holidays\tCtrl-H",
+			              :helpString => "Toggle highlighting the holidays",
+						  :checked => true,
+			              :style => ITEM_CHECK) { |event| on_cal_holidays(event) }
+			    menu_item(:text => "Highlight &special dates\tCtrl-S",
+			              :helpString => "Test custom highlighting",
+			              :style => ITEM_CHECK) { |event| on_cal_special(event) }
+			    menu_item(:text => "Show s&urrounding weeks\tCtrl-W",
+			              :helpString => "Show the neighbouring weeks in the prev/next month",
+			              :style => ITEM_CHECK) { |event| on_cal_show_surrounding_weeks(event) }
+			    menu_separator
+			    menu_item(:text => "To&ggle month selector style\tCtrl-G",
+			              :helpString => "Use another style for the calendar controls",
+			              :style => ITEM_CHECK) { |event| on_cal_seq_month(event) }
+			    menu_item(:text => "&Month can be changed\tCtrl-M",
+			              :helpString => "Allow changing the month in the calendar",
+						  :checked => true,
+			              :style => ITEM_CHECK) { |event| on_cal_allow_month(event) }
+			    menu_item(:text => "&Year can be changed\tCtrl-Y",
+			              :helpString => "Allow changing the year in the calendar",
+						  :checked => true,
+			              :style => ITEM_CHECK) { |event| on_cal_allow_year(event) }
+			end
 			# menu_bar.check(Calendar_Cal_Monday, TRUE)
 			# menu_bar.check(Calendar_Cal_Holidays, TRUE)
 			# menu_bar.check(Calendar_Cal_Month, TRUE)
@@ -188,7 +190,7 @@ WxShoes.App do
 		@panel = panel do
 			@sizer = vbox_sizer do
 				@calendar = calendar_ctrl(:date => Time.now, :style => (CAL_MONDAY_FIRST | CAL_SHOW_HOLIDAYS), :flag => (ALIGN_CENTRE|ALL))
-				@calendar.extend(MyCalendarModule)
+				MyCalendarModule.attach(@calendar)
 			end
 		end
 		@panel.layout
